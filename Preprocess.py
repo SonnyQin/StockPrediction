@@ -10,7 +10,7 @@ def load_data():
             dictdata[item[6]]=[]
         dictdata[item[6]].append(item[:6])
     for key in dictdata.keys():
-        dictdata[key]=np.array(dictdata[key])
+        dictdata[key]=np.mat(dictdata[key])
     return dictdata
 def DrawClosePrice(name, data):
     plt.yticks(np.arange(0, 100, 1))
@@ -72,12 +72,9 @@ def DrawVolume(name, data):
     plt.title(name+' CVolume Change Chart')
     plt.tick_params(axis='both',which='both',labelsize=5)
     plt.show()
-#归一化数据
-def normal(min, max, val):
-    return (val-min)/(max-min)
-# data=load_data()
-# print(data['AAL'])
-# DrawClosePrice('AAL', data=data)
+data=load_data()
+print(data['AAL'])
+DrawClosePrice('FLS', data=data)
 # DrawOpenPrice('AAL', data=data)
 # DrawMaximumPrice('AAL', data=data)
 # DrawMinimumPrice('AAL', data=data)
