@@ -72,6 +72,9 @@ def DrawVolume(name, data):
     plt.title(name+' CVolume Change Chart')
     plt.tick_params(axis='both',which='both',labelsize=5)
     plt.show()
+#归一化数据
+def normal(min, max, val):
+    return (val-min)/(max-min)
 # data=load_data()
 # print(data['AAL'])
 # DrawClosePrice('AAL', data=data)
