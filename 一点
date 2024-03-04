@@ -1,0 +1,31 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.preprocessing import MinMaxScaler
+
+file = "D:/桌面/archive/all_stocks_5yr.csv"
+data = pd.read_csv(file)
+data = data.sort_values('date')
+data.head()
+print(data.shape)
+
+#未成功的画图
+sns.set_style("darkgrid")
+plt.figure(figsize=(15, 9))
+plt.plot(data[['close']])
+plt.xticks(range(0, data.shape[0], 20), data['date'].loc[::20], rotation=45)
+plt.title('stock price', fontsize=15, fontweight="bold")
+plt.xlabel('date', fontsize=13)
+plt.ylabel('close price', fontsize=13)
+#plt.show()
+
+#缩放
+price = data[['close']]
+price.info()
+scaler = MinMaxScaler(feature_range=(-1, 1))
+price['close'] = scaler.fit_transform(price['close'].values.reshape(-1, 1))
+print(price['close'].shape)
+
+
+
