@@ -121,4 +121,7 @@ def predict(data,name, save):
 if __name__=='__main__':
     data=Preprocess.load_data()
     for key in data.keys():
-        predict(data,key, True)
+        try:
+            predict(data,key, True)
+        except:
+            pass
