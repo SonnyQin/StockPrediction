@@ -10,7 +10,7 @@ def load_data():
             dictdata[item[6]]=[]
         dictdata[item[6]].append(item[:6])
     for key in dictdata.keys():
-        dictdata[key]=np.mat(dictdata[key])
+        dictdata[key]=np.mat(dictdata[key])#ToDo:
     return dictdata
 def DrawClosePrice(name, data):
     plt.yticks(np.arange(0, 100, 1))
@@ -72,10 +72,12 @@ def DrawVolume(name, data):
     plt.title(name+' CVolume Change Chart')
     plt.tick_params(axis='both',which='both',labelsize=5)
     plt.show()
-data=load_data()
-print(data['AAL'])
-DrawClosePrice('FLS', data=data)
-# DrawOpenPrice('AAL', data=data)
-# DrawMaximumPrice('AAL', data=data)
-# DrawMinimumPrice('AAL', data=data)
-# DrawVolume('AAL', data=data)
+    
+if __name__=='__main__':
+    data=load_data()
+    print(data['AAL'])
+    DrawClosePrice('FLS', data=data)
+    DrawOpenPrice('AAL', data=data)
+    DrawMaximumPrice('AAL', data=data)
+    DrawMinimumPrice('AAL', data=data)
+    DrawVolume('AAL', data=data)
