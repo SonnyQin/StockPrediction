@@ -68,7 +68,7 @@ def loss(x, y):
     
 
 #全局最佳
-def paraAdjustW(data, t, kMax=100, amount=200):
+def paraAdjustW(data, t, kMax=20, amount=200):
     minn=np.inf
     k=0
     t=arrange(t)    #t现在是np.array
@@ -86,7 +86,7 @@ def paraAdjustW(data, t, kMax=100, amount=200):
     return k, minn
 
 #指定最佳
-def paraAdjustA(data, t, a=3,kMax=100, amount=200):
+def paraAdjustA(data, t, a=3,kMax=50, amount=200):
     minn=np.inf
     k=0
     t=arrange(t)    #t现在是np.array
@@ -102,12 +102,8 @@ def paraAdjustA(data, t, a=3,kMax=100, amount=200):
         print(minn)
     
     return k, minn
-        
-     
-if __name__=='__main__':
-    name='GPC'
-    
-    data=Preprocess.load_data()
+
+def predict(data,name, save):
     
     x=data[name][:-201].copy()
     y=data[name][-200:].copy()
@@ -116,4 +112,13 @@ if __name__=='__main__':
     results=kNN_Prediction(data[name][:-51],k,50)
     plt.plot(data[name][-50:,4],linewidth=0.5)
     plt.plot(results[:,3],linewidth=1)
-    plt.show()
+    if save:
+        plt.savefig(r'C:/Users/A/Desktop/Predict/'+name)
+    else:
+        plt.show()
+    plt.close()
+     
+if __name__=='__main__':
+    data=Preprocess.load_data()
+    for key in data.keys():
+        predict(data,key, True)
