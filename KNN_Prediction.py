@@ -16,7 +16,7 @@ def arrange(data):
     return x
 
 #依次训练各个特征, data是np.mat
-def kNN_Prediction(data, k=5, predictNum=50):
+def kNN_Prediction(data, k=5, predictNum=200):
     data=np.array(data)
     #后续50个数据的存储, 记录未归一化的数据
     predict=[data[-1][1:],]
@@ -64,18 +64,36 @@ def kNN_Prediction(data, k=5, predictNum=50):
     return np.array(predict).astype(np.float64)
 
 def loss(x, y):
-    return np.sum((x-y)*(x-y))
+    return np.sum((x-y)*(x-y))#/(x.shape[0]*x.shape[1])
     
 
 #全局最佳
-def paraAdjustW(data, t, kMax=100):
+def paraAdjustW(data, t, kMax=100, amount=200):
     minn=np.inf
     k=0
     t=arrange(t)    #t现在是np.array
     outResults=[]
     for i in range(1, kMax):
-        results=kNN_Prediction(data, i)
+        results=kNN_Prediction(data, i,amount)
         l=loss(results, t)
+        if  l< minn:
+            minn=l
+            k=i
+            outResults=results
+        print(k)
+        print(minn)
+    
+    return k, minn
+
+#指定最佳
+def paraAdjustA(data, t, a=3,kMax=100, amount=200):
+    minn=np.inf
+    k=0
+    t=arrange(t)    #t现在是np.array
+    outResults=[]
+    for i in range(1, kMax):
+        results=kNN_Prediction(data, i,amount)
+        l=loss(results[:,a], t[:,a+1])
         if  l< minn:
             minn=l
             k=i
@@ -87,13 +105,15 @@ def paraAdjustW(data, t, kMax=100):
         
      
 if __name__=='__main__':
-    name='MCD'
+    name='GPC'
     
     data=Preprocess.load_data()
-
-    x=data[name][:-51].copy()
-    y=data[name][-50:].copy()
-    k,min=paraAdjustW(x,y)
+    
+    x=data[name][:-201].copy()
+    y=data[name][-200:].copy()
+    k,min=paraAdjustA(x,y,3,amount=200)
+    
     results=kNN_Prediction(data[name][:-51],k,50)
-    plt.plot(results[:,3],linewidth=1, color='red')
+    plt.plot(data[name][-50:,4],linewidth=0.5)
+    plt.plot(results[:,3],linewidth=1)
     plt.show()
