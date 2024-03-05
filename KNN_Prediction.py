@@ -102,7 +102,7 @@ def paraAdjustA(data, t, a=3,kMax=50, amount=200):
         print(minn)
     
     return k, minn
-
+#预测
 def predict(data,name, save):
     
     x=data[name][:-201].copy()
@@ -120,8 +120,12 @@ def predict(data,name, save):
      
 if __name__=='__main__':
     data=Preprocess.load_data()
+    count=0
     for key in data.keys():
-        try:
-            predict(data,key, True)
-        except:
-            pass
+        count+=1
+        if(count>47):
+            try:
+                predict(data,key, True)
+            except:
+                pass
+    print(count)
