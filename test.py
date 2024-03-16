@@ -1,5 +1,6 @@
 import pandas as pd
-df=pd.DataFrame([11,12,13,14,15,16,17,18,19,20])
-print(df)
-df=df.shift(-1)
-print(df)
+from Preprocess  import *
+data=[[1,2,3,4,5,6],[11,12,13,14,15,16]]
+data=pd.DataFrame(data)
+x=data.iloc[-1]
+print(pd.DataFrame(x))
