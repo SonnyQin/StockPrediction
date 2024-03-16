@@ -81,3 +81,36 @@ if __name__=='__main__':
     DrawMaximumPrice('AAL', data=data)
     DrawMinimumPrice('AAL', data=data)
     DrawVolume('AAL', data=data)
+    
+def arrange(data):
+    data=np.array(data)
+    x=np.delete(data, 0, 1)
+    x=x.astype(np.float64)
+    return x
+
+def MSEw(x, y):
+    return np.sum((x-y)*(x-y))#/(x.shape[0]*x.shape[1])
+
+def MSE(x, y):
+    return np.sum((x-y)*(x-y))/(x.shape[0]*x.shape[1])
+
+#梯度下降
+def numerical_gradient(f, x):
+    h = 1e-4 # 0.0001
+    grad = np.zeros_like(x)
+    
+    it = np.nditer(x, flags=['multi_index'], op_flags=['readwrite'])
+    while not it.finished:
+        idx = it.multi_index
+        tmp_val = x[idx]
+        x[idx] = float(tmp_val) + h
+        fxh1 = f(x) # f(x+h)
+        
+        x[idx] = tmp_val - h 
+        fxh2 = f(x) # f(x-h)
+        grad[idx] = (fxh1 - fxh2) / (2*h)
+        
+        x[idx] = tmp_val # 还原值
+        it.iternext()   
+        
+    return grad

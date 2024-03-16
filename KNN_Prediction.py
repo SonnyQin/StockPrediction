@@ -9,17 +9,9 @@ from sklearn.model_selection import train_test_split
 a=np.array([1,2,3,4,5,6])
 b=np.array([6,5,4,3,2,1])
 
-def arrange(data):
-    data=np.array(data)
-    x=np.delete(data, 0, 1)
-    x=x.astype(np.float64)
-    return x
-
 #依次训练各个特征, data是np.mat
 def kNN_Prediction(data, k=5, predictNum=200):
     data=np.array(data)
-    #后续50个数据的存储, 记录未归一化的数据
-    predict=[data[-1][1:],]
     
     #整理特征数据
     #去除日期
@@ -28,10 +20,25 @@ def kNN_Prediction(data, k=5, predictNum=200):
     raw=x.copy()
     #将最后一项特征删除，因为无法推断
     x=x[:-1]
+    
+    #添加时间序列
+    timeOrder=np.linspace(1, x.shape[0], x.shape[0])
+    x=np.insert(x, x.shape[1], timeOrder, axis=1)
+    
+    #记录最后的时间序号
+    LastIndex=x.shape[0]
+    
+    #后续50个数据的存储, 记录未归一化的数据
+    predict=[x[-1][:],]
+    
+    
+    
     #归一化数据
     scaler=MinMaxScaler()
     scaler.fit(x)
     x=scaler.transform(x)
+    
+    #print(x[:,-1])
     
     #设置分类器
     kNN=KNeighborsClassifier()
@@ -56,22 +63,24 @@ def kNN_Prediction(data, k=5, predictNum=200):
         #找到点， 并根据权重计算
         for j in range(0,5):
             results.append((neighbours[:,j]*distance).sum(axis=1))
+        LastIndex+=1
+        results.append(LastIndex)
         results=np.array(results)
         results=results.reshape(-1)
-        #results=[[d[0] for d in results]]
         predict.append(results)
-        #print(results)
+        #将预测好的数据重放回
+        
     return np.array(predict).astype(np.float64)
 
 def loss(x, y):
-    return np.sum((x-y)*(x-y))#/(x.shape[0]*x.shape[1])
+    return Preprocess.MSEw(x,y)
     
 
 #全局最佳
 def paraAdjustW(data, t, kMax=20, amount=200):
     minn=np.inf
     k=0
-    t=arrange(t)    #t现在是np.array
+    t=Preprocess.arrange(t)    #t现在是np.array
     outResults=[]
     for i in range(1, kMax):
         results=kNN_Prediction(data, i,amount)
@@ -89,7 +98,7 @@ def paraAdjustW(data, t, kMax=20, amount=200):
 def paraAdjustA(data, t, a=3,kMax=50, amount=200):
     minn=np.inf
     k=0
-    t=arrange(t)    #t现在是np.array
+    t=Preprocess.arrange(t)    #t现在是np.array
     outResults=[]
     for i in range(1, kMax):
         results=kNN_Prediction(data, i,amount)
@@ -122,10 +131,10 @@ if __name__=='__main__':
     data=Preprocess.load_data()
     count=0
     for key in data.keys():
-        count+=1
-        if(count>47):
-            try:
+        # count+=1
+        # if(count>0):
+            # try:
                 predict(data,key, True)
-            except:
-                pass
+            # except:
+            #     pass
     print(count)

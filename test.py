@@ -1,6 +1,5 @@
-import matplotlib.pyplot as plt
-x=[1,2,3,4,5,6,7,8,9,10]
-y=[5,6,7,8,9]
-plt.plot(x)
-plt.plot(y)
-plt.show()
+import pandas as pd
+df=pd.DataFrame([11,12,13,14,15,16,17,18,19,20])
+print(df)
+df=df.shift(-1)
+print(df)
