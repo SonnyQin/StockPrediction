@@ -165,7 +165,7 @@ if __name__=='__main__':
     count=0
     for key in data.keys():
         count+=1
-        if(count>7):
+        if(count>14):
             try:
                 predict(data,key, True)
             except:
