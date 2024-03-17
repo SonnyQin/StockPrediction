@@ -37,7 +37,7 @@ def kNN_Prediction(data, k=5, predictNum=200):
     
     #后续50个数据的存储, 记录未归一化的数据
     predict=[x.iloc[-1],]
-    print(predict)
+    #print(predict)
     
     #记录特征数
     traitAmount=x.shape[1]
@@ -84,8 +84,8 @@ def kNN_Prediction(data, k=5, predictNum=200):
         results=[x[0] for x in results]
         cresults=pd.DataFrame([results])
         raw=raw.append(cresults)
-        raw=raw.reset_index()
-        print(raw.tail(5))
+        #raw=raw.reset_index()
+        #print(raw.tail(5))
         
         #更新预测的值
         results.append(LastIndex)
@@ -98,7 +98,8 @@ def kNN_Prediction(data, k=5, predictNum=200):
         predict.append(new)
 
         #重新训练
-        preX=preX.append(new)
+        new=pd.DataFrame(new).T
+        pd.concat([preX, new], axis=0)
         x=scaler.transform(preX)
         kNN.fit(x, y)
         
@@ -127,12 +128,12 @@ def paraAdjustW(data, t, kMax=20, amount=200):
     return k, minn
 
 #指定最佳
-def paraAdjustA(data, t, a=3,kMax=50, amount=200):
+def paraAdjustA(data, t, a=3,kMax=20, amount=200):
     minn=np.inf
     k=0
     t=Preprocess.arrange(t)    #t现在是np.array
     outResults=[]
-    for i in range(1, kMax):
+    for i in range(10, kMax):
         results=kNN_Prediction(data, i,amount)
         l=loss(results[:,a], t[:,a+1])
         if  l< minn:
@@ -154,7 +155,7 @@ def predict(data,name, save):
     plt.plot(data[name][-50:,4],linewidth=0.5)
     plt.plot(results[:,3],linewidth=1)
     if save:
-        plt.savefig(r'C:/Users/A/Desktop/Predict/'+name)
+        plt.savefig(r'C:/Users/15105/Desktop/Predict/'+name)
     else:
         plt.show()
     plt.close()
@@ -163,10 +164,10 @@ if __name__=='__main__':
     data=Preprocess.load_data()
     count=0
     for key in data.keys():
-        # count+=1
-        # if(count>0):
-            # try:
+        count+=1
+        if(count>7):
+            try:
                 predict(data,key, True)
-            # except:
-            #     pass
+            except:
+                pass
     print(count)
