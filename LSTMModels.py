@@ -77,7 +77,7 @@ def predict(x_test, y_test):
 
 data=getStockData()
 x_train, y_train, x_test, y_test=splitData(data)
-train(x_train, y_train)
+# train(x_train, y_train)
 predict(x_test, y_test)
     
     
