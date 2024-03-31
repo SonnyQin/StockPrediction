@@ -76,11 +76,11 @@ def DrawVolume(name, data):
 if __name__=='__main__':
     data=load_data()
     print(data['AAL'])
-    DrawClosePrice('FLS', data=data)
-    DrawOpenPrice('AAL', data=data)
-    DrawMaximumPrice('AAL', data=data)
-    DrawMinimumPrice('AAL', data=data)
-    DrawVolume('AAL', data=data)
+    DrawClosePrice('AAL', data=data)
+    # DrawOpenPrice('AAL', data=data)
+    # DrawMaximumPrice('AAL', data=data)
+    # DrawMinimumPrice('AAL', data=data)
+    # DrawVolume('AAL', data=data)
     
 def arrange(data):
     data=np.array(data)
