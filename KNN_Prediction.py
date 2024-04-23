@@ -83,7 +83,7 @@ def kNN_Prediction(data, k=5, predictNum=200):
         #raw 没有时间序列
         results=[x[0] for x in results]
         cresults=pd.DataFrame([results])
-        raw=raw.append(cresults)
+        raw=raw._append(cresults)
         #raw=raw.reset_index()
         #print(raw.tail(5))
         
@@ -106,7 +106,7 @@ def kNN_Prediction(data, k=5, predictNum=200):
     return np.array(predict).astype(np.float64)
 
 def loss(x, y):
-    return Preprocess.MSEw(x,y)
+    return Preprocess.MSE(x,y)
     
 
 #全局最佳
@@ -149,25 +149,31 @@ def predict(data,name, save):
     
     x=data[name][:-201].copy()
     y=data[name][-200:].copy()
-    k,min=paraAdjustA(x,y,3,amount=200)
+    k,min=paraAdjustA(x,y,3)
     
     results=kNN_Prediction(data[name][:-51],k,50)
     plt.plot(data[name][-50:,4],linewidth=0.5)
     plt.plot(results[:,3],linewidth=1)
+    plt.title(name)
+    plt.legend(['Real','Predict'])
+    #输出均方差
+    print(min)
     if save:
         plt.savefig(r'C:/Users/15105/Desktop/Predict/'+name)
     else:
         plt.show()
     plt.close()
      
-if __name__=='__main__':
-    data=Preprocess.load_data()
-    count=0
-    for key in data.keys():
-        count+=1
-        if(count>14):
-            try:
-                predict(data,key, True)
-            except:
-                pass
-    print(count)
+# if __name__=='__main__':
+#     data=Preprocess.load_data()
+#     count=0
+#     for key in data.keys():
+#         count+=1
+#         # try:
+#         predict(data,key, True)
+#         # except:
+#         #     pass
+#     print(count)
+
+data=Preprocess.load_data()
+predict(data, 'AAL', False)
